@@ -51,11 +51,6 @@ class Banner{
         this.addMainImage();
     }
 
-    previousImage() {
-        this.mainImage--;
-        this.addMainImage();
-    }
-
     start() {
         setInterval(() => {
             this.nextImage();
@@ -67,13 +62,20 @@ class Banner{
 
     event.preventDefault();
 
-    var form = event.target;
+    var form = document.getElementById('formSubmit');
 
-    var http = new XMLHttpRequest();
-    http.open(form.method.toUpperCase(), 'http://api.vtexcrm.com.br/corebiz/dataentities/TE/documents', true);
-    http.setRequestHeader('Accept', 'application/vnd.vtex.ds.v10+json');
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.send(new FormData(form));
+    var jsonData = JSON.stringify({
+        'name'   : form.name.value,
+        'email'  : form.email.value,
+        'phone'  : form.phone.value,
+        'notice' : form.notice.value
+    });
+
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.open('POST', 'http://api.vtexcrm.com.br/corebiz/dataentities/TE/documents', true);
+    httpRequest.setRequestHeader('Accept', 'application/vnd.vtex.ds.v10+json');
+    httpRequest.setRequestHeader("Content-type", "application/json");
+    httpRequest.send(jsonData);
 
     form.reset();
-}
+};
